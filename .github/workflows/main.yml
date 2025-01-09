@@ -63,7 +63,7 @@ jobs:
             echo "Stopped and removed any existing container"
 
             # Run the new container
-            docker run --network="host" --name angular-app -d ramantila/reports-frontend:latest
+            docker run --name web-vfd-reports -p 4500:80 -d ramantila/reports-frontend:latest
             echo "Started new container with the latest image"
 
             # Verify container is running

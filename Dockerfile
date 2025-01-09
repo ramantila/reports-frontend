@@ -1,4 +1,4 @@
-# Stage 1: Build the Angular app
+# Stage 1: Build Angular App
 FROM node:latest as builder
 
 # Set the working directory for the Node.js build stage
