@@ -1,26 +1,29 @@
-# Create the node stage
+# Stage 1: Build the Angular app
 FROM node:latest as builder
 
-#Set the working directory
+# Set the working directory for the Node.js build stage
 WORKDIR /app
 
-#Copy from the currect directory to working directory
+# Copy the entire project to the container
 COPY . .
 
-#Run npm install & build application
-RUN npm install && npm run ng build
+# Install dependencies and build the Angular application
+RUN npm install && npm run build --prod
 
-#Create the nginx stage for the serving the content
-FROM nginx:alphine
+# Stage 2: Serve the Angular app using Nginx
+FROM nginx:alpine
 
-#Set the working directory to nginx assets directory
+# Set the working directory to Nginx's default web directory
 WORKDIR /usr/share/nginx/html
 
-#Remove the default nginx static files
+# Remove default Nginx static files (if any)
 RUN rm -rf ./*
 
-#Copy the static content from builder stage
-COPY --from=builder /app/dist/web-vfd-reports
+# Copy the built Angular app from the builder stage
+COPY --from=builder /app/dist/web-vfd-reports/ .
 
-#Container run the nginx with global directive and Daemon off
-ENTRYPOINT ["nginx","-g","daemon off"]
+# Expose the default HTTP port
+EXPOSE 4200
+
+# Start Nginx in the foreground
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
