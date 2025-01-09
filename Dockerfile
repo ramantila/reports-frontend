@@ -23,7 +23,7 @@ RUN rm -rf ./*
 COPY --from=builder /app/dist/web-vfd-reports/ .
 
 # Expose the default HTTP port
-EXPOSE 4200
+EXPOSE 80
 
 # Start Nginx in the foreground
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
